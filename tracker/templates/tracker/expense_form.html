@@ -1,0 +1,58 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
+    <h3 class="text-center mb-4">
+      {% if form.instance.pk %}Edit Expense{% else %}Add Expense{% endif %}
+    </h3>
+
+    <form method="POST">
+      {% csrf_token %}
+      
+      <!-- Amount -->
+      <div class="mb-3">
+        {{ form.amount.label_tag }}
+        {{ form.amount }}
+        {% if form.amount.errors %}
+          <div class="text-danger">{{ form.amount.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Date -->
+      <div class="mb-3">
+        {{ form.date.label_tag }}
+        {{ form.date }}
+        {% if form.date.errors %}
+          <div class="text-danger">{{ form.date.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Category -->
+      <div class="mb-3">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+        {% if form.category.errors %}
+          <div class="text-danger">{{ form.category.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Note -->
+      <div class="mb-3">
+        {{ form.note.label_tag }}
+        {{ form.note }}
+        {% if form.note.errors %}
+          <div class="text-danger">{{ form.note.errors }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Submit button -->
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary w-50">
+          {% if form.instance.pk %}Update{% else %}Add{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends 'tracker/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Filters -->
+  <form method="GET" class="row g-2 mb-4">
+    <div class="col-md-3">
+      <select name="category" class="form-select">
+        {% for cat in categories %}
+          <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+    </div>
+    <div class="col-md-3">
+      <input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+  </form>
+
+  <!-- Summary -->
+  <div class="mb-4 p-3 bg-light rounded">
+    <h5>Total Expenses: ₹{{ total }}</h5>
+    <div class="row mt-2">
+      <div class="col-md-6">
+        <h6>By Category:</h6>
+        <ul>
+          {% for item in summary_by_category %}
+            <li>{{ item.category }}: ₹{{ item.total }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h6>By Month:</h6>
+        <ul>
+          {% for item in summary_by_month %}
+            <li>{{ item.month|date:"F Y" }}: ₹{{ item.total }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Expenses Table -->
+  <h3>Expenses</h3>
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Note</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for exp in expenses %}
+      <tr>
+        <td>{{ exp.date }}</td>
+        <td>₹{{ exp.amount }}</td>
+        <td>{{ exp.category }}</td>
+        <td>{{ exp.note }}</td>
+        <td>
+          <a href="{% url 'expense_update' exp.id %}" class="btn btn-warning btn-sm">Edit</a>
+          <a href="{% url 'expense_delete' exp.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center">No expenses found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</div>
+
+<!-- Optional Charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card p-3">
+      <h5 class="text-center">Expenses by Category</h5>
+      <canvas id="categoryChart"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5 class="text-center">Expenses by Month</h5>
+      <canvas id="monthChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Category Chart
+  const categoryLabels = [{% for item in summary_by_category %}'{{ item.category }}',{% endfor %}];
+  const categoryData = [{% for item in summary_by_category %}{{ item.total }},{% endfor %}];
+  new Chart(document.getElementById('categoryChart'), {
+    type: 'pie',
+    data: {
+      labels: categoryLabels,
+      datasets: [{ data: categoryData, backgroundColor: ['#0d6efd','#198754','#ffc107','#dc3545','#6c757d'] }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // Month Chart
+  const monthLabels = [{% for item in summary_by_month %}'{{ item.month|date:"M Y" }}',{% endfor %}];
+  const monthData = [{% for item in summary_by_month %}{{ item.total }},{% endfor %}];
+  new Chart(document.getElementById('monthChart'), {
+    type: 'bar',
+    data: { labels: monthLabels, datasets: [{ label: 'Expenses', data: monthData, backgroundColor: '#0d6efd' }] },
+    options: { responsive: true, scales: { y: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+  });
+</script>
+
+{% endblock %}
