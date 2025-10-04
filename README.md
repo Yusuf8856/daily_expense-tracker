@@ -65,9 +65,11 @@ Users can **add, update, delete, and view expenses**, categorize them, and see v
 ## Screenshots
 
 <!-- Add screenshots in `screenshots/` folder -->
-![Dashboard](https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Home-1.png)
-![Add Expense](https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Add-Expenses.png)
-![Charts](https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Home-2.png)
+![Dashboard] (https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Home-1.png)
+
+![Add Expense] (https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Add-Expenses.png)  
+
+![Charts] (https://github.com/Yusuf8856/daily_expense-tracker/blob/main/screenshots/Home-2.png)
 
 ---
 
